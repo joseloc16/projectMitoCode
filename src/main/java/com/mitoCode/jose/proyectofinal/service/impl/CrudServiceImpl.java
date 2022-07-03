@@ -1,36 +1,36 @@
 package com.mitoCode.jose.proyectofinal.service.impl;
 
+import com.mitoCode.jose.proyectofinal.repository.IGenericRepository;
 import com.mitoCode.jose.proyectofinal.service.ICrudService;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 public abstract class CrudServiceImpl<T, ID> implements ICrudService<T, ID> {
 
-  protected abstract JpaRepository<T, ID> getRepo();
+  protected abstract IGenericRepository<T, ID> getRepo();
 
   @Override
   public T register(T t) throws Exception {
-    return null;
+    return getRepo().save(t);
   }
 
   @Override
   public T update(T t) throws Exception {
-    return null;
+    return getRepo().save(t);
   }
 
   @Override
   public List<T> readAll() throws Exception {
-    return null;
+    return getRepo().findAll();
   }
 
   @Override
   public T readById(ID id) throws Exception {
-    return null;
+    return getRepo().findById(id).orElse(null);
   }
 
   @Override
   public void remove(ID id) throws Exception {
-
+    getRepo().deleteById(id);
   }
 }

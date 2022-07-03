@@ -1,6 +1,8 @@
 package com.mitoCode.jose.proyectofinal.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +18,10 @@ public class Estudiante {
   private Integer id;
 
   private String nombres;
+
   private String apellidos;
+
   private String dni;
+
   private double edad;
 }
