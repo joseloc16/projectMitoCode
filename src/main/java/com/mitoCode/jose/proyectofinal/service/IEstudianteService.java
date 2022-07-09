@@ -5,4 +5,5 @@ import org.springframework.stereotype.Service;
 
 
 public interface IEstudianteService extends ICrudService<Estudiante, Integer> {
+  boolean estudianteExis(Integer id);
 }

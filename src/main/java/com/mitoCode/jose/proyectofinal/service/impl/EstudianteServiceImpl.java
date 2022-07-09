@@ -19,4 +19,9 @@ public class EstudianteServiceImpl extends CrudServiceImpl<Estudiante, Integer>
   protected IGenericRepository<Estudiante, Integer> getRepo() {
     return repo;
   }
+
+  @Override
+  public boolean estudianteExis(Integer id) {
+    return repo.existsById(id);
+  }
 }

@@ -3,7 +3,7 @@ package com.mitoCode.jose.proyectofinal.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,5 +22,5 @@ public class Curso {
   private boolean estado;
 
   @ManyToMany(mappedBy = "cursos")
-  Set<Estudiante> estudiantes;
+  List<Estudiante> estudiantes;
 }
