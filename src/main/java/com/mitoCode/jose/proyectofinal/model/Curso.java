@@ -19,7 +19,7 @@ public class Curso {
   @Column(nullable = false, length = 50)
   private String siglas;
 
-  private boolean estado;
+  private Boolean estado;
 
   @ManyToMany(mappedBy = "cursos")
   List<Estudiante> estudiantes;

@@ -12,4 +12,6 @@ public interface ICrudService<T, ID> {
   T readById(ID id) throws Exception;
 
   void remove(ID id) throws Exception;
+
+  boolean isExist(ID id);
 }

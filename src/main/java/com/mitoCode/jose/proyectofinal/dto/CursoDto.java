@@ -12,5 +12,5 @@ public class CursoDto {
   private Integer id;
   private String nombreCurso;
   private String siglasCurso;
-  private boolean estadoCurso;
+  private Boolean estadoCurso;
 }

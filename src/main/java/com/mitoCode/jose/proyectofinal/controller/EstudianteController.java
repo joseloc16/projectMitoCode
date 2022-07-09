@@ -1,6 +1,8 @@
 package com.mitoCode.jose.proyectofinal.controller;
 
+import com.mitoCode.jose.proyectofinal.dto.CursoDto;
 import com.mitoCode.jose.proyectofinal.dto.EstudianteDto;
+import com.mitoCode.jose.proyectofinal.model.Curso;
 import com.mitoCode.jose.proyectofinal.model.Estudiante;
 import com.mitoCode.jose.proyectofinal.service.IEstudianteService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +38,11 @@ public class EstudianteController {
     return new ResponseEntity<>(estudianteList, HttpStatus.OK);
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<EstudianteDto> obtenerEstudiante(@PathVariable("id") Integer id)
+  @GetMapping("/{idEstudiante}")
+  public ResponseEntity<EstudianteDto> obtenerEstudiante(
+      @PathVariable("idEstudiante") Integer idEstudiante)
       throws Exception {
-    EstudianteDto dto = mapper.map(service.readById(id), EstudianteDto.class);
+    EstudianteDto dto = mapper.map(service.readById(idEstudiante), EstudianteDto.class);
     //im0plementar ModelNotFoundException
     return new ResponseEntity<>(dto, HttpStatus.OK);
   }
@@ -68,25 +71,26 @@ public class EstudianteController {
       @PathVariable("id") Integer id, @RequestBody EstudianteDto estudianteDto)
       throws Exception {
 
-    if (service.estudianteExis(id)) {
-
-      Estudiante estudiante = new Estudiante();
+    if (service.isExist(id)) {
+      Estudiante estudiante = service.readById(id);
       estudiante.setNombres(estudianteDto.getNombreEstudiante());
       estudiante.setApellidos(estudianteDto.getApellidosEstudiante());
       estudiante.setEdad(estudianteDto.getEdadEstudiante());
       estudiante.setDni(estudianteDto.getDniEstudiante());
+      //Estudiante estudiante = mapper.map(estudianteDto, Estudiante.class);
+      //service.readById(estudiante.getIdEstudiante());
 
-      EstudianteDto dto = mapper.map(service.update(estudiante), EstudianteDto.class);
-      return new ResponseEntity<>(dto, HttpStatus.OK);
+      mapper.map(service.update(estudiante), EstudianteDto.class);
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> eliminarEstudiante(@PathVariable("id") Integer id)
+  @DeleteMapping("/{idEstudiante}")
+  public ResponseEntity<Void> eliminarEstudiante(@PathVariable("idEstudiante") Integer idEstudiante)
       throws Exception {
-    service.remove(id);
+    service.remove(idEstudiante);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }

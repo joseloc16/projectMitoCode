@@ -33,4 +33,9 @@ public abstract class CrudServiceImpl<T, ID> implements ICrudService<T, ID> {
   public void remove(ID id) throws Exception {
     getRepo().deleteById(id);
   }
+
+  @Override
+  public boolean isExist(ID id) {
+    return getRepo().existsById(id);
+  }
 }
