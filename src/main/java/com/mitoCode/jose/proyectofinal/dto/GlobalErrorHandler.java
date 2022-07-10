@@ -11,6 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
@@ -36,6 +37,10 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
       HttpHeaders headers,
       HttpStatus status,
       WebRequest request) {
-    return super.handleMethodArgumentNotValid(ex, headers, status, request);
+    String message= ex.getBindingResult().getFieldErrors().stream().map(
+        error -> error.getField()+": "+error.getDefaultMessage()
+    ).collect(Collectors.joining(" "));
+    ErrorDto dto = new ErrorDto(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
+    return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
   }
 }

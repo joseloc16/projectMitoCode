@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,7 @@ public class CursoController {
   }
 
   @PostMapping
-  public ResponseEntity<CursoDto> registrarCurso(@RequestBody CursoDto cursoDto)
+  public ResponseEntity<CursoDto> registrarCurso(@Valid @RequestBody CursoDto cursoDto)
       throws Exception {
     Curso curso = service.register(mapper.map(cursoDto, Curso.class));
     CursoDto dto = mapper.map(curso, CursoDto.class);
@@ -55,7 +56,7 @@ public class CursoController {
 
   @PutMapping("/{idCurso}")
   public ResponseEntity<CursoDto> actualizarCurso(
-      @PathVariable("idCurso") Integer idCurso, @RequestBody CursoDto cursoDto)
+      @PathVariable("idCurso") Integer idCurso, @Valid @RequestBody CursoDto cursoDto)
       throws Exception {
     Curso c = service.readById(idCurso);
     if (c == null) {

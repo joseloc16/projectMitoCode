@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,7 +53,8 @@ public class EstudianteController {
   }
 
   @PostMapping
-  public ResponseEntity<EstudianteDto> registrarEstudiante(@RequestBody EstudianteDto estudianteDto)
+  public ResponseEntity<EstudianteDto> registrarEstudiante(
+      @Valid @RequestBody EstudianteDto estudianteDto)
       throws Exception {
       Estudiante estudiante = new Estudiante();
       estudiante.setNombres(estudianteDto.getNombreEstudiante());
@@ -66,7 +68,8 @@ public class EstudianteController {
 
   @PutMapping("/{idEstudiante}")
   public ResponseEntity<EstudianteDto> actualizarEstudiante(
-      @PathVariable("idEstudiante") Integer idEstudiante, @RequestBody EstudianteDto estudianteDto)
+      @PathVariable("idEstudiante") Integer idEstudiante,
+      @Valid @RequestBody EstudianteDto estudianteDto)
       throws Exception {
     Estudiante e = service.readById(idEstudiante);
     if ( e == null) {
