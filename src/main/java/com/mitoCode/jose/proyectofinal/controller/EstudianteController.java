@@ -1,8 +1,7 @@
 package com.mitoCode.jose.proyectofinal.controller;
 
-import com.mitoCode.jose.proyectofinal.dto.CursoDto;
 import com.mitoCode.jose.proyectofinal.dto.EstudianteDto;
-import com.mitoCode.jose.proyectofinal.model.Curso;
+import com.mitoCode.jose.proyectofinal.exceptions.ModelNotFoundException;
 import com.mitoCode.jose.proyectofinal.model.Estudiante;
 import com.mitoCode.jose.proyectofinal.service.IEstudianteService;
 import lombok.extern.slf4j.Slf4j;
@@ -42,16 +41,19 @@ public class EstudianteController {
   public ResponseEntity<EstudianteDto> obtenerEstudiante(
       @PathVariable("idEstudiante") Integer idEstudiante)
       throws Exception {
-    EstudianteDto dto = mapper.map(service.readById(idEstudiante), EstudianteDto.class);
-    //im0plementar ModelNotFoundException
-    return new ResponseEntity<>(dto, HttpStatus.OK);
+    Estudiante estudiante = service.readById(idEstudiante);
+    if (estudiante == null) {
+      throw new ModelNotFoundException("ID NOT FOUND: " + idEstudiante);
+    } else {
+      EstudianteDto dto = mapper.map(service.readById(idEstudiante), EstudianteDto.class);
+      //im0plementar ModelNotFoundException
+      return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
   }
 
   @PostMapping
   public ResponseEntity<EstudianteDto> registrarEstudiante(@RequestBody EstudianteDto estudianteDto)
       throws Exception {
-
-    try {
       Estudiante estudiante = new Estudiante();
       estudiante.setNombres(estudianteDto.getNombreEstudiante());
       estudiante.setApellidos(estudianteDto.getApellidosEstudiante());
@@ -60,37 +62,37 @@ public class EstudianteController {
 
       EstudianteDto dto = mapper.map(service.register(estudiante), EstudianteDto.class);
       return new ResponseEntity<>(dto, HttpStatus.CREATED);
-    } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
   }
 
-  @PutMapping("/{id}")
+  @PutMapping("/{idEstudiante}")
   public ResponseEntity<EstudianteDto> actualizarEstudiante(
-      @PathVariable("id") Integer id, @RequestBody EstudianteDto estudianteDto)
+      @PathVariable("idEstudiante") Integer idEstudiante, @RequestBody EstudianteDto estudianteDto)
       throws Exception {
-
-    if (service.isExist(id)) {
-      Estudiante estudiante = service.readById(id);
-      estudiante.setNombres(estudianteDto.getNombreEstudiante());
-      estudiante.setApellidos(estudianteDto.getApellidosEstudiante());
-      estudiante.setEdad(estudianteDto.getEdadEstudiante());
-      estudiante.setDni(estudianteDto.getDniEstudiante());
-      //Estudiante estudiante = mapper.map(estudianteDto, Estudiante.class);
-      //service.readById(estudiante.getIdEstudiante());
-
-      mapper.map(service.update(estudiante), EstudianteDto.class);
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    Estudiante e = service.readById(idEstudiante);
+    if ( e == null) {
+      throw new ModelNotFoundException("ID NOT FOUND: " + idEstudiante);
     }
+    Estudiante estudiante = service.readById(idEstudiante);
+    estudiante.setNombres(estudianteDto.getNombreEstudiante());
+    estudiante.setApellidos(estudianteDto.getApellidosEstudiante());
+    estudiante.setEdad(estudianteDto.getEdadEstudiante());
+    estudiante.setDni(estudianteDto.getDniEstudiante());
+    //Estudiante estudiante = mapper.map(estudianteDto, Estudiante.class);
+    //service.readById(estudiante.getIdEstudiante());
 
-    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    mapper.map(service.update(estudiante), EstudianteDto.class);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   @DeleteMapping("/{idEstudiante}")
   public ResponseEntity<Void> eliminarEstudiante(@PathVariable("idEstudiante") Integer idEstudiante)
       throws Exception {
-    service.remove(idEstudiante);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    Estudiante estudiante = service.readById(idEstudiante);
+    if (estudiante == null) {
+      throw new ModelNotFoundException("ID NOT FOUND: " + idEstudiante);
+    } else {
+      service.remove(idEstudiante);
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
   }
 }
