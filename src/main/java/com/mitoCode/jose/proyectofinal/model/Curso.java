@@ -9,6 +9,17 @@ import java.util.List;
 @Data
 public class Curso {
 
+  public Curso(Integer idCurso, String nombre, String siglas, Boolean estado) {
+    this.idCurso = idCurso;
+    this.nombre = nombre;
+    this.siglas = siglas;
+    this.estado = estado;
+  }
+
+  public Curso() {
+
+  }
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer idCurso;
